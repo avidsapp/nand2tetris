@@ -1,0 +1,106 @@
+// Attribution: https://github.com/mmmries/nand2tetris/tree/master/projects/09/Snake
+
+class SnakeGame {
+  field Snake snake;    // the snake
+  field int direction;  // the snake's current direction:
+                        // 0=none, 1=up, 2=down, 3=left, 4=right
+
+  field Square square; // the square of this game
+  field int direction; // the square's current direction:
+                      // 0=none, 1=up, 2=down, 3=left, 4=right
+
+  /** Constructs a new Square Game. */
+  constructor SquareGame new() {
+     // Creates a 30 by 30 pixels square and positions it at the top-left
+     // of the screen.
+     let square = Square.new(0, 0, 30);
+     let direction = 0;  // initial state is no movement
+     return this;
+  }
+
+  constructor SnakeGame new() {
+    let snake = Snake.new(256, 128);
+    let direction = 1;  // initial no movement state
+    let square = Square.new(0, 0, 4);
+    return this;
+  }
+
+  method void dispose(){
+    do snake.dispose();
+    do Memory.deAlloc(this);
+    return;
+  }
+
+  method void run(){
+    var char key;     // the key currently pressed by the user
+    var boolean exit, grow;
+
+    while (~exit) {
+      // waits for a key to be pressed.
+      while (key = 0) {
+          let key = Keyboard.keyPressed();
+          do moveSnake(direction, grow);
+          do drawScreen();
+      }
+
+      if (key = 81) {
+          let exit = true;
+      }
+      if (key = 88) {
+          let grow = true;
+      }
+      if (key = 131) {
+          let direction = 1;
+      }
+      if (key = 133) {
+          let direction = 2;
+      }
+      if (key = 130) {
+          let direction = 3;
+      }
+      if (key = 132) {
+          let direction = 4;
+      }
+
+      // waits for the key to be released.
+      while (~(key = 0)) {
+          let key = Keyboard.keyPressed();
+          do moveSnake(direction, grow);
+          do drawScreen();
+          let grow = false;
+      }
+    }
+    return;
+  }
+
+  method void moveSnake(int direction, bool grow) {
+      if (direction = 1) {
+          do snake.moveUp(grow);
+      }
+      if (direction = 2) {
+          do snake.moveDown(grow);
+      }
+      if (direction = 3) {
+          do snake.moveLeft(grow);
+      }
+      if (direction = 4) {
+          do snake.moveRight(grow);
+      }
+
+      do Sys.wait(5); // Delays the next movement.
+      return;
+  }
+
+  method void drawScreen(){
+    var PixelNode pix;
+
+    do Screen.clearScreen();
+    let pix = snake.first();
+
+    while( ~(pix = null) ){
+      do Screen.drawPixel(pix.x(), pix.y());
+      let pix = pix.next();
+    }
+    return;
+  }
+}

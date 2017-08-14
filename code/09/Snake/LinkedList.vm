@@ -1,0 +1,94 @@
+function LinkedList.new 0
+push constant 2
+call Memory.alloc 1
+pop pointer 0
+push constant 0
+pop this 0
+push constant 0
+pop this 1
+push pointer 0
+return
+function LinkedList.dispose 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 0
+eq
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 0
+call PixelNode.dispose 1
+pop temp 0
+label IF_FALSE0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function LinkedList.push 0
+push argument 0
+pop pointer 0
+push this 1
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 1
+pop this 0
+push argument 1
+pop this 1
+goto IF_END0
+label IF_FALSE0
+push this 1
+push argument 1
+call PixelNode.setNext 2
+pop temp 0
+push argument 1
+pop this 1
+label IF_END0
+push constant 0
+return
+function LinkedList.shift 1
+push argument 0
+pop pointer 0
+push this 0
+pop local 0
+push local 0
+call PixelNode.next 1
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+pop this 0
+push constant 0
+pop this 1
+goto IF_END0
+label IF_FALSE0
+push local 0
+call PixelNode.next 1
+pop this 0
+label IF_END0
+push local 0
+push constant 0
+call PixelNode.setNext 2
+pop temp 0
+push local 0
+call PixelNode.dispose 1
+pop temp 0
+push constant 0
+return
+function LinkedList.first 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function LinkedList.last 0
+push argument 0
+pop pointer 0
+push this 1
+return
